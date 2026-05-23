@@ -20,6 +20,8 @@ namespace pattern_recognition {
         
         // 3. Adım: while döngüsü ile dosyanın sonuna kadar satır satır oku
         while(getline(MyCSVFile,line)){
+            if(line.empty()) continue;
+            
             std::stringstream ss(line);
             std::string token; // Virgüllerin arasındaki her bir kelimeyi/sayıyı tutacağımız geçici değişken
             std::vector<double> features;
