@@ -7,34 +7,35 @@
 
 using namespace pattern_recognition;
 
-void runKNNTest(const std::vector<Datapoint>& dataset) {
+void runKNNTest(const std::vector<Datapoint<double>>& dataset) {
     std::cout << "\n========================================\n";
     std::cout << "      [1] SUPERVISED LEARNING: KNN      \n";
     std::cout << "========================================\n";
     
-    KNNClassifier model(3);
+    // Explicitly defining the type as <double>
+    KNNClassifier<double> model(3);
     model.fit(dataset);
     std::cout << "Model trained successfully.\n";
 
     std::vector<double> unknown_features = {7.1, 3.1, 4.8, 1.4};
-    Datapoint test_point(unknown_features, "UNKNOWN");
+    Datapoint<double> test_point(unknown_features, "UNKNOWN");
 
     std::string predicted_label = model.predict(test_point);
     std::cout << "Input Features: 7.1, 3.1, 4.8, 1.4\n";
     std::cout << "Prediction -> " << predicted_label << "\n";
 }
 
-void runKMeansTest(const std::vector<Datapoint>& dataset) {
+void runKMeansTest(const std::vector<Datapoint<double>>& dataset) {
     std::cout << "\n========================================\n";
     std::cout << "     [2] UNSUPERVISED LEARNING: K-MEANS \n";
     std::cout << "========================================\n";
     
-    KMeans model(3, 100);
+    KMeans<double> model(3, 100);
     std::cout << "Training K-Means model with K=3...\n";
     model.fit(dataset);
     std::cout << "Model successfully converged!\n\n";
 
-    std::vector<Datapoint> final_centroids = model.getCentroids();
+    std::vector<Datapoint<double>> final_centroids = model.getCentroids();
     for (size_t i = 0; i < final_centroids.size(); ++i) {
         std::cout << final_centroids[i].label << " Center: [ ";
         for (double feature : final_centroids[i].features) {
@@ -46,10 +47,11 @@ void runKMeansTest(const std::vector<Datapoint>& dataset) {
 
 int main() {
     srand(time(NULL)); 
-    std::cout << "Pattern Recognition Engine Started...\n";
+    std::cout << "Pattern Recognition Engine Started (Template Architecture)...\n";
 
     try {
-        std::vector<Datapoint> dataset = CSVParser::parse("data/iris.csv");
+        // Parsing the CSV file dynamically into Datapoint<double>
+        std::vector<Datapoint<double>> dataset = CSVParser<double>::parse("data/iris.csv");
         std::cout << "Dataset successfully parsed. Total records: " << dataset.size() << "\n";
 
         runKNNTest(dataset);

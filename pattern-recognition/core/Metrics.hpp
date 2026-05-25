@@ -6,24 +6,22 @@
 #include <stdexcept>
 
 namespace pattern_recognition{
-    inline double euclideanDistance(const Datapoint& dp1, const Datapoint& dp2){
+    template<typename T>
+    inline T euclideanDistance(const Datapoint<T>& dp1, const Datapoint<T>& dp2){
         // Implementation for Euclidean distance calculation
         if(dp1.features.size() != dp2.features.size()){
             throw std::invalid_argument("Datapoint feature sizes must be equal!");
         }
 
-        double sum = 0.0;
+        T sum = 0;
         
-        for(size_t i = 0; ){
-            for(double f2 : dp2.features){
-                sum+=std::pow((f1-f2),2);
-            }
+        for(size_t i = 0; i<dp1.features.size(); ++i){
+           T diff = dp1.features[i]-dp2.features[i];
+           sum += (diff * diff);
         }
         
-        return sum;
+        return static_cast<T>(std::sqrt(sum));
     }
 }
-
-
 
 #endif //METRICS_HPP
