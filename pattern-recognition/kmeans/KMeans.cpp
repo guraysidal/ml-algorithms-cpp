@@ -1,6 +1,7 @@
 #include "KMeans.hpp"
 #include <random>
 #include <limits>
+#include <algorithm>
 
 namespace pattern_recognition {
 
@@ -14,13 +15,19 @@ namespace pattern_recognition {
     // 2. Initial assignments (Initialize with -1 indicating no cluster assigned yet)
     std::vector<int> assignments(dataset.size(), -1);
     
-    // 3. Select random initial centroids
-    for(size_t k = 0; k < k_count; k++) {
+    // 3. Select UNIQUE random initial centroids
+    std::vector<int> chosen_indices;
+    while (centroids.size() < k_count) {
         int randomIndex = rand() % dataset.size();
-        Datapoint initial_centroid = dataset[randomIndex];
-        // Assign a custom label for the cluster since this is Unsupervised Learning
-        initial_centroid.label = "Cluster_" + std::to_string(k); 
-        centroids.push_back(initial_centroid);
+        
+        
+        if (std::find(chosen_indices.begin(), chosen_indices.end(), randomIndex) == chosen_indices.end()) {
+            chosen_indices.push_back(randomIndex);
+            
+            Datapoint initial_centroid = dataset[randomIndex];
+            initial_centroid.label = "Cluster_" + std::to_string(centroids.size()); 
+            centroids.push_back(initial_centroid);
+        }
     }
 
     // --- MAIN ITERATION LOOP ---
